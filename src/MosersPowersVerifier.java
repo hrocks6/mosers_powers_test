@@ -92,7 +92,7 @@ public class MosersPowersVerifier
         switch (compResult) 
         {
             case 0: // Special output
-                System.out.println("f(x+1) = 2^n");
+                System.out.println("\n**** f(x) = 2^n ****\n");
                 return false;
             case 1: // f(x) >= 2^n, still need to check f(x+1) == 2^n
                 valid = false;
@@ -104,7 +104,7 @@ public class MosersPowersVerifier
         switch (compResult) 
         {
             case 0: // Special output
-                System.out.println("f(x+1) = 2^n");
+                System.out.println("\n**** f(x+1) = 2^n ****\n");
             case -1: // f(x+1) <= 2^n
                 valid = false;
         }
@@ -143,7 +143,7 @@ public class MosersPowersVerifier
         boolean finalResult = verifyValues(x, n);
 
         // Final output
-        System.out.println("\n---------------------------");
+        System.out.println("---------------------------");
         if (finalResult) System.out.println("f(x) < 2^n < f(x+1) = TRUE");
         else System.out.println("f(x) < 2^n < f(x+1) = FALSE");
     }
