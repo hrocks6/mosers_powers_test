@@ -11,11 +11,12 @@ import java.util.Scanner;
 public class MosersPowersVerifier
 {
     // Static variables for f(x)
-    private static final BigDecimal OneTwentyfourth = BigDecimal.valueOf((double)1/24);
-    private static final BigDecimal TwentythreeTwentyfourth = BigDecimal.valueOf((double)23/24);
+    private static BigDecimal OneTwentyfourth = new BigDecimal("1");
+    private static BigDecimal TwentythreeTwentyfourth = new BigDecimal("23");
     private static final BigDecimal OneFourth = new BigDecimal("0.25");
     private static final BigDecimal ThreeFourths = new BigDecimal("0.75");
     private static final BigDecimal One = new BigDecimal("1.0");
+    private static final BigDecimal TwentyFour = new BigDecimal("24");
 
     /**
      * Gets a file from user input.
@@ -51,7 +52,7 @@ public class MosersPowersVerifier
         powerOfTwo = powerOfTwo.shiftLeft(n);
 
         //System.out.println(powerOfTwo);
-        return new BigDecimal(powerOfTwo.toString());
+        return new BigDecimal(powerOfTwo);
     }
 
     /**
@@ -95,6 +96,7 @@ public class MosersPowersVerifier
                 System.out.println("\n**** f(x) = 2^n ****\n");
                 return false;
             case 1: // f(x) >= 2^n, still need to check f(x+1) == 2^n
+                System.out.println("\tf(x) >= 2^n");
                 valid = false;
         }
 
@@ -106,6 +108,7 @@ public class MosersPowersVerifier
             case 0: // Special output
                 System.out.println("\n**** f(x+1) = 2^n ****\n");
             case -1: // f(x+1) <= 2^n
+                System.out.println("\tf(x+1) <= 2^n");
                 valid = false;
         }
 
@@ -139,6 +142,10 @@ public class MosersPowersVerifier
             System.out.println("ERROR: " + e.getMessage());
             System.exit(1);
         }
+
+        // Get more accurate 1/24 and 23/24
+        OneTwentyfourth = OneTwentyfourth.divide(TwentyFour, n, RoundingMode.HALF_UP);
+        TwentythreeTwentyfourth = TwentythreeTwentyfourth.divide(TwentyFour, n, RoundingMode.HALF_UP);
 
         boolean finalResult = verifyValues(x, n);
 
