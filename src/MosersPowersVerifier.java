@@ -60,8 +60,8 @@ public class MosersPowersVerifier
      */
     private static BigDecimal calculateFunction(BigInteger x)
     {
-        BigDecimal xDecimal = new BigDecimal(x.toString());
-        BigDecimal result = new BigDecimal(x.toString());
+        BigDecimal xDecimal = new BigDecimal(x);
+        BigDecimal result = new BigDecimal(x);
 
         // x(x(x(1/24x - 1/4) + 23/24) - 3/4) + 1
         result = result.multiply(OneTwentyfourth);
