@@ -1,7 +1,5 @@
 import java.io.File;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.Scanner;
 
 /**
@@ -10,14 +8,6 @@ import java.util.Scanner;
  */
 public class MosersPowersVerifier
 {
-    // Static variables for f(x)
-    private static BigDecimal OneTwentyfourth = new BigDecimal("1");
-    private static BigDecimal TwentythreeTwentyfourth = new BigDecimal("23");
-    private static final BigDecimal OneFourth = new BigDecimal("0.25");
-    private static final BigDecimal ThreeFourths = new BigDecimal("0.75");
-    private static final BigDecimal One = new BigDecimal("1.0");
-    private static final BigDecimal TwentyFour = new BigDecimal("24");
-
     /**
      * Gets a file from user input.
      * @param scanner System.in scanner
@@ -46,34 +36,33 @@ public class MosersPowersVerifier
     /**
      * Returns 2^n
      */
-    private static BigDecimal getPowerOfTwo(int n)
+    private static BigInteger getPowerOfTwo(int n)
     {
         BigInteger powerOfTwo = new BigInteger("1");
         powerOfTwo = powerOfTwo.shiftLeft(n);
 
         //System.out.println(powerOfTwo);
-        return new BigDecimal(powerOfTwo);
+        return powerOfTwo;
     }
 
     /**
      * Calculates f(x)=1/24x⁴-1/4x³+23/24x²-3/4x+1
      */
-    private static BigDecimal calculateFunction(BigInteger x)
+    private static BigInteger calculateFunction(BigInteger x)
     {
-        BigDecimal xDecimal = new BigDecimal(x);
-        BigDecimal result = new BigDecimal(x);
+        BigInteger result = BigInteger.valueOf(0);
+        result = result.add(x);
 
-        // x(x(x(1/24x - 1/4) + 23/24) - 3/4) + 1
-        result = result.multiply(OneTwentyfourth);
-        result = result.subtract(OneFourth);
-        result = result.multiply(xDecimal);
-        result = result.add(TwentythreeTwentyfourth);
-        result = result.multiply(xDecimal);
-        result = result.subtract(ThreeFourths);
-        result = result.multiply(xDecimal);
-        result = result.add(One);
+        // Calculate (x(x(x(x - 6) + 23) - 18) / 24) + 1
+        result = result.subtract(BigInteger.valueOf(6));
+        result = result.multiply(x);
+        result = result.add(BigInteger.valueOf(23));
+        result = result.multiply(x);
+        result = result.subtract(BigInteger.valueOf(18));
+        result = result.multiply(x);
+        result = result.divide(BigInteger.valueOf(24));
+        result = result.add(BigInteger.valueOf(1));
 
-        result = result.setScale(0, RoundingMode.HALF_UP);
         //System.out.println(result);
         return result;
     }
@@ -85,10 +74,10 @@ public class MosersPowersVerifier
     {
         boolean valid = true;
         System.out.println("Calculating 2^n...");
-        BigDecimal powerOfTwo = getPowerOfTwo(n);
+        BigInteger powerOfTwo = getPowerOfTwo(n);
 
         System.out.println("Calculating f(x)...");
-        BigDecimal functionX = calculateFunction(x);
+        BigInteger functionX = calculateFunction(x);
         int compResult = functionX.compareTo(powerOfTwo);
         switch (compResult) 
         {
@@ -101,7 +90,7 @@ public class MosersPowersVerifier
         }
 
         System.out.println("Calculating f(x+1)...");
-        BigDecimal functionXPlusOne = calculateFunction(x.add(new BigInteger("1")));
+        BigInteger functionXPlusOne = calculateFunction(x.add(new BigInteger("1")));
         compResult = functionXPlusOne.compareTo(powerOfTwo);
         switch (compResult) 
         {
@@ -142,10 +131,6 @@ public class MosersPowersVerifier
             System.out.println("ERROR: " + e.getMessage());
             System.exit(1);
         }
-
-        // Get more accurate 1/24 and 23/24
-        OneTwentyfourth = OneTwentyfourth.divide(TwentyFour, n, RoundingMode.HALF_UP);
-        TwentythreeTwentyfourth = TwentythreeTwentyfourth.divide(TwentyFour, n, RoundingMode.HALF_UP);
 
         boolean finalResult = verifyValues(x, n);
 
